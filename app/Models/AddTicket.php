@@ -15,9 +15,9 @@ class AddTicket
      * Запись в таблицу tickets
      *
      * @param int $event_id, string $event_date, int $ticket_adult_price, int $ticket_adult_quantity, int $ticket_kid_price, int $ticket_kid_quantity, int $ticket_benefit_price, int $ticket_benefit_quantity, int $ticket_group_price, int $ticket_group_quantity, int $order_id, string $type
-     * @return
+     * @return array
      */
-    public function AddTicket(int $event_id, string $event_date, int $ticket_adult_price, int $ticket_adult_quantity, int $ticket_kid_price, int $ticket_kid_quantity, int $ticket_benefit_price, int $ticket_benefit_quantity, int $ticket_group_price, int $ticket_group_quantity, int $order_id, string $type)
+    public function AddTicket(int $event_id, string $event_date, int $ticket_adult_price, int $ticket_adult_quantity, int $ticket_kid_price, int $ticket_kid_quantity, int $ticket_benefit_price, int $ticket_benefit_quantity, int $ticket_group_price, int $ticket_group_quantity, int $order_id, string $type): array
     {   
         //Определяем тип и стоимость билета
         if($type == "adult"){
@@ -40,7 +40,7 @@ class AddTicket
         $result = [];
         
         //Выпоняем проверку barcode для каждого билета
-        for ($a = 1; $a <= $tickets; $a++) {
+        for ($a = 1; $a <= $tickets; $a++) {         
             //Обращение к FakeAPI (book)
             //Количество попыток 50
             //Если количество попыток превышает 50, завершаем попытки (API неисправен)
@@ -48,7 +48,7 @@ class AddTicket
                 $barcode = mt_rand(11111111, 99999999);
                 $ticket = new TicketModel();
                 
-                //Проверка на дубликат barcode в таблице tickets
+                //Проверка на уникальность barcode в таблице tickets
                 if($ticket->SelectTicket($barcode) !== true){
                     $info = new FakeApi();
                     $json = $info->BookingOrder($event_id, $event_date, $ticket_adult_price, $ticket_adult_quantity, $ticket_kid_price, $ticket_kid_quantity, $ticket_benefit_price, $ticket_benefit_quantity, $ticket_group_price, $ticket_group_quantity, $barcode);
@@ -61,7 +61,7 @@ class AddTicket
                         if(key($examin) == "message"){
                             //Обращение к FakeAPI (approve) пройдена успешно
                             //Выполняем запись в таблицу tickets
-                            //Прибавим сумму билета к заказу
+                            //Прибавляем сумму билета к заказу
                             $ticket->AddTicket($order_id, $type, $price, $barcode);
                             $order = new OrderModel();
                             $order->UpdatePrice($order_id, $price);

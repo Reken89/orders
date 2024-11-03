@@ -13,7 +13,7 @@ class TicketModel extends ConnectDB
      * @param int $eorder_id, string $type, int $price, int $barcode
      * @return bool
      */
-    public function AddTicket(int $order_id, string $type, int $price, int $barcode)
+    public function AddTicket(int $order_id, string $type, int $price, int $barcode): bool
     {   
         $sql = "INSERT INTO tickets (order_id, type, price, barcode) VALUES "
                 . "(:order_id, :type, :price, :barcode)";               
@@ -32,7 +32,7 @@ class TicketModel extends ConnectDB
      * @param int $barcode
      * @return bool
      */
-    public function SelectTicket(int $barcode)
+    public function SelectTicket(int $barcode): bool
     {   
         $sql = "SELECT * FROM tickets WHERE barcode = :barcode";             
         $stmt = $this->db->prepare($sql);
@@ -47,7 +47,7 @@ class TicketModel extends ConnectDB
      * @param int $order_id
      * @return bool
      */
-    public function FindTicket(int $order_id)
+    public function FindTicket(int $order_id): bool
     {   
         $sql = "SELECT * FROM tickets WHERE order_id = $order_id";             
         $stmt = $this->db->prepare($sql);

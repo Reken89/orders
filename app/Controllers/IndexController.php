@@ -12,7 +12,7 @@ class IndexController
      * Запись заказа в БД
      *
      * @param int $event_id, string $event_date, int $ticket_adult_price, int $ticket_adult_quantity, int $ticket_kid_price, int $ticket_kid_quantity, int $ticket_benefit_price, int $ticket_benefit_quantity, int $ticket_group_price, int $ticket_group_quantity
-     * @return 
+     * @return array
      */
     public function RecordInfo(int $event_id, string $event_date, int $ticket_adult_price, int $ticket_adult_quantity, int $ticket_kid_price, int $ticket_kid_quantity, int $ticket_benefit_price, int $ticket_benefit_quantity, int $ticket_group_price, int $ticket_group_quantity)
     {
@@ -71,6 +71,7 @@ class IndexController
                 'info'   => null,
             ];
         }else{
+            //Если хотябы один билет прошел проверку по API
             //Собираем информацию о результате выполнения
             $result = [
                 'status' => true,

@@ -12,9 +12,9 @@ class OrderModel extends ConnectDB
      * Возвращаем id последней записи
      *
      * @param int $event_id, string $event_date, int $equal_price, string $created
-     * @return 
+     * @return int
      */
-    public function AddOrder(int $event_id, string $event_date, int $equal_price, string $created)
+    public function AddOrder(int $event_id, string $event_date, int $equal_price, string $created): int
     {   
         $sql = "INSERT INTO orders (event_id, event_date, equal_price, created) VALUES "
                 . "(:event_id, :event_date, :equal_price, :created)";               
@@ -32,9 +32,9 @@ class OrderModel extends ConnectDB
      * Прибавляем стоимость билета
      *
      * @param int $order_id, int $price
-     * @return 
+     * @return bool
      */
-    public function UpdatePrice(int $order_id, int $price)
+    public function UpdatePrice(int $order_id, int $price): bool
     {   
         $sql = "UPDATE orders SET equal_price = `equal_price` + :price WHERE id = $order_id";               
         $stmt = $this->db->prepare($sql);
@@ -47,13 +47,14 @@ class OrderModel extends ConnectDB
      * Удаляем заказ
      *
      * @param int $id
-     * @return 
+     * @return bool
      */
-    public function DeleteOrder(int $id)
+    public function DeleteOrder(int $id): bool
     {   
         $sql = "DELETE FROM orders WHERE id = $id";               
         $stmt = $this->db->prepare($sql);
-        $stmt->execute();     
+        $stmt->execute();   
+        return true;
     } 
 
 }
